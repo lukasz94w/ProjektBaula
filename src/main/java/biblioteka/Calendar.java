@@ -97,6 +97,36 @@ public class Calendar {
         }
     }
 
+    public int getUserCount() {
+        String SQL = "SELECT count(*) FROM users";
+        int count = 0;
+
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(SQL)) {
+            rs.next();
+            count = rs.getInt(1);
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+
+        return count;
+    }
+
+    public void findUserByID(int userID) {
+        String SQL = "SELECT user_id, name, surname "
+                + "FROM users "
+                + "WHERE user_id = ?";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(SQL)) {
+
+            pstmt.setInt(1, userID);
+            ResultSet rs = pstmt.executeQuery();
+            displayUser(rs);
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
     public void getUsers() {
         String SQL = "SELECT user_id, name, surname FROM users";
 
@@ -164,6 +194,36 @@ public class Calendar {
                     statement.executeBatch();
                 }
             }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    public int getThingCount() {
+        String SQL = "SELECT count(*) FROM things";
+        int count = 0;
+
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(SQL)) {
+            rs.next();
+            count = rs.getInt(1);
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+
+        return count;
+    }
+
+    public void findThingByID(int thingID) {
+        String SQL = "SELECT thing_id, name "
+                + "FROM things "
+                + "WHERE thing_id = ?";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(SQL)) {
+
+            pstmt.setInt(1, thingID);
+            ResultSet rs = pstmt.executeQuery();
+            displayThing(rs);
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
