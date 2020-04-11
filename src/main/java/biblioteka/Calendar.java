@@ -148,6 +148,64 @@ public class Calendar {
     }
 
 
+    public int changeUserName(int id, String name) {
+        String SQL = "UPDATE users "
+                + "SET name = ? "
+                + "WHERE user_id = ?";
+
+        int affectedrows = 0;
+
+        try (PreparedStatement pstmt = conn.prepareStatement(SQL)) {
+
+            pstmt.setString(1, name);
+            pstmt.setInt(2, id);
+
+            affectedrows = pstmt.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return affectedrows;
+    }
+
+    public int changeUserSurname(int id, String surname) {
+        String SQL = "UPDATE users "
+                + "SET surname = ? "
+                + "WHERE user_id = ?";
+
+        int affectedrows = 0;
+
+        try (PreparedStatement pstmt = conn.prepareStatement(SQL)) {
+
+            pstmt.setString(1, surname);
+            pstmt.setInt(2, id);
+
+            affectedrows = pstmt.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return affectedrows;
+    }
+
+    public int deleteUser(int id) {
+        String SQL = "DELETE FROM users WHERE user_id = ?";
+
+        int affectedrows = 0;
+
+        try (PreparedStatement pstmt = conn.prepareStatement(SQL)) {
+
+            pstmt.setInt(1, id);
+
+            affectedrows = pstmt.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return affectedrows;
+    }
+
+
     public long insertThing(Thing thing) {
 
         String SQL = "INSERT INTO things(name) "
@@ -246,6 +304,43 @@ public class Calendar {
             System.out.println(rs.getString("thing_id") + "\t"
                     + rs.getString("name") + " ");
         }
+    }
+
+    public int changeThingName(int id, String name) {
+        String SQL = "UPDATE things "
+                + "SET name = ? "
+                + "WHERE thing_id = ?";
+
+        int affectedrows = 0;
+
+        try (PreparedStatement pstmt = conn.prepareStatement(SQL)) {
+
+            pstmt.setString(1, name);
+            pstmt.setInt(2, id);
+
+            affectedrows = pstmt.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return affectedrows;
+    }
+
+    public int deleteThing(int id) {
+        String SQL = "DELETE FROM things WHERE thing_id = ?";
+
+        int affectedrows = 0;
+
+        try (PreparedStatement pstmt = conn.prepareStatement(SQL)) {
+
+            pstmt.setInt(1, id);
+
+            affectedrows = pstmt.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return affectedrows;
     }
 
     public void closeConnection() {

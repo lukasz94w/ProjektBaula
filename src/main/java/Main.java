@@ -27,14 +27,21 @@ public class Main
 //        c.insertUser(user1);
 //        c.insertUser(user2);
 //        c.insertThing(thing1);
+
+        c.deleteUser(12);
+        c.deleteThing(3);
         c.getUsers();
         c.getThings();
 
         System.out.println(c.getThingCount());
         System.out.println(c.getUserCount());
 
-        c.findThingByID(3);
-        c.findUserByID(12);
+        //c.changeThingName(3, "plaaa");
+        //c.findThingByID(3);
+
+        //c.changeUserName(12, "Enriccoa");
+        //c.changeUserSurname(12, "Palllazzoa");
+        //c.findUserByID(12);
 
         c.closeConnection();
 
