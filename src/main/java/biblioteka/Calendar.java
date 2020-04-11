@@ -2,6 +2,7 @@ package biblioteka;
 import model.Thing;
 import model.User;
 import java.sql.*;
+import java.util.List;
 //https://www.postgresqltutorial.com/postgresql-jdbc/ - fajny tutorial, sa tam tez metody do update'u czy kasowania ale narazie niepotrzebne
 //https://www.postgresqltutorial.com/postgresql-jdbc/query/ - na podstawie tego wyszukiwanie Userow zrobione
 //https://www.postgresqltutorial.com/postgresql-jdbc/insert/ - na podstawie tego dodawanie Userow zrobione
@@ -44,34 +45,56 @@ public class Calendar {
         return true;
     }
 
-        public long insertUser(User user) {
+    public long insertUser(User user) {
 
-            String SQL = "INSERT INTO users(name, surname) "
+        String SQL = "INSERT INTO users(name, surname) "
                     + "VALUES(?,?)";
 
-            long id = 0;
+        long id = 0;
 
-            try {PreparedStatement pstmt = conn.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
-                pstmt.setString(1, user.getName());
-                pstmt.setString(2, user.getSurname());
+        try {PreparedStatement pstmt = conn.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
+            pstmt.setString(1, user.getName());
+            pstmt.setString(2, user.getSurname());
 
-                int affectedRows = pstmt.executeUpdate();
-                // check the affected rows
-                if (affectedRows > 0) {
-                    // get the ID back
-                    try (ResultSet rs = pstmt.getGeneratedKeys()) {
-                        if (rs.next()) {
-                            id = rs.getLong(1);
-                        }
-
+            int affectedRows = pstmt.executeUpdate();
+            // check the affected rows
+            if (affectedRows > 0) {
+                // get the ID back
+                try (ResultSet rs = pstmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        id = rs.getLong(1);
+                    }
             }catch (SQLException ex) {
-                        System.out.println(ex.getMessage());
+                    System.out.println(ex.getMessage());
                     }
                 }
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }
             return id;
+    }
+
+    public void insertUsers(List<User> list) {
+        String SQL = "INSERT INTO users(name, surname) "
+                + "VALUES(?,?)";
+        try (
+                PreparedStatement statement = conn.prepareStatement(SQL);) {
+            int count = 0;
+
+            for (User user : list) {
+                statement.setString(1, user.getName());
+                statement.setString(2, user.getSurname());
+
+                statement.addBatch();
+                count++;
+                // execute every 100 rows or less
+                if (count % 100 == 0 || count == list.size()) {
+                    statement.executeBatch();
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
     public void getUsers() {
@@ -122,6 +145,28 @@ public class Calendar {
             System.out.println(ex.getMessage());
         }
         return id;
+    }
+
+    public void insertThings(List<Thing> list) {
+        String SQL = "INSERT INTO things(name) "
+                + "VALUES(?)";
+        try (
+                PreparedStatement statement = conn.prepareStatement(SQL);) {
+            int count = 0;
+
+            for (Thing thing : list) {
+                statement.setString(1, thing.getName());
+
+                statement.addBatch();
+                count++;
+                // execute every 100 rows or less
+                if (count % 100 == 0 || count == list.size()) {
+                    statement.executeBatch();
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
     public void getThings() {
