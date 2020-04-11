@@ -21,21 +21,3 @@ public class Main
         c.closeConnection();
     }
 }
-
-
-//        c.insertUser("Jan", "Kowalski");
-//        c.insertThing("Car");
-//
-//
-//
-//        List<User> users = c.selectUser();
-//
-//        System.out.println("Lista uŻYDkowników: ");
-//        for(User d: users)
-//            System.out.println(d);
-//
-//        List<Thing> things = c.selectThing();
-//
-//        System.out.println("Lista rzeczy: ");
-//        for(User e: users)
-//            System.out.println(e);
